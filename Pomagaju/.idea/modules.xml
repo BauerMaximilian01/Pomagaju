@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Pomagaju.iml" filepath="$PROJECT_DIR$/Pomagaju.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../PomagajuClasses/PomagajuClasses.iml" filepath="$PROJECT_DIR$/../PomagajuClasses/PomagajuClasses.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../PomagajuServer/PomagajuServer.iml" filepath="$PROJECT_DIR$/../PomagajuServer/PomagajuServer.iml" />
+    </modules>
+  </component>
+</project>

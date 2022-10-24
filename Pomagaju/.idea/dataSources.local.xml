@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="IU-221.5921.22">
+    <data-source name="PomagajuDB@localhost" uuid="b861f683-e827-4b0e-aa3d-0ba3cdbbdf07">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" exact-version="0" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>max</user-name>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>

@@ -1,0 +1,114 @@
+<project name="pomagaju" default="compile" basedir="../../Pomagaju">
+
+  <property name="main.class" value="swe4.rmi.PomagajuServer"/>
+
+  <property environment="env"/>
+  <property name="jar.name" value="${ant.project.name}.jar"/>
+  <property name="src.dir" value="/"/>
+  <property name="test.src.dir" value="/"/>
+  <property name="target.basedir" value="/bin"/>
+  <property name="target.dir" value="../../Pomagaju/bin/classes"/>
+  <property name="test.target.dir" value="../../Pomagaju/bin/test-classes"/>
+  <property name="jar.dir" value="${basedir}/jar"/>
+  <property name="local.lib.dir" value="/lib"/>
+  <property name="user.lib.dir" value="${env.SWE4_HOME}/lib"/>
+  <property name="javafx.lib.dir" value="${user.lib.dir}/javafx-sdk-17.0.2/lib"/>
+
+  <path id="junit.compile.path" >
+    <fileset dir="${user.lib.dir}/junit/jupiter/" erroronmissingdir="false"/>
+  </path>
+
+  <path id="junit.run.path">
+    <fileset dir="${user.lib.dir}/junit/platform/" erroronmissingdir="false"/>
+  </path>
+
+  <path id="lib.path">
+    <fileset dir="${javafx.lib.dir}" erroronmissingdir="true">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="../../Pomagaju/lib" erroronmissingdir="false">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <path id="classpath">
+    <path refid="lib.path"/>
+    <pathelement path="../../Pomagaju/bin/classes"/>
+  </path>
+
+  <path id="test.classpath">
+    <path refid="classpath"/>
+    <path refid="junit.compile.path"/>
+    <path refid="junit.run.path"/>
+    <pathelement path="../../Pomagaju/bin/test-classes"/>
+  </path>
+
+  <target name="all" depends="clean,compile"
+          description="Clean build and dist directories, then compile"/>
+
+  <target name="compile" description="Compile Java sources">
+    <mkdir dir="../../Pomagaju/bin/classes"/>
+    <echo>${toString:classpath}</echo>
+    <javac includeantruntime="false" srcdir="${src.dir}" destdir="../../Pomagaju/bin/classes">
+      <include name="**/*.java"/>
+      <classpath refid="classpath"/>
+    </javac>
+
+    <mkdir dir="../../Pomagaju/bin/test-classes"/>
+    <javac includeantruntime="false" srcdir="${test.src.dir}" destdir="../../Pomagaju/bin/test-classes">
+      <include name="**/*.java"/>
+      <classpath refid="classpath"/>
+      <classpath refid="junit.compile.path"/>
+    </javac>
+  </target>
+
+  <target name="run" depends="compile,copy-resources"
+          description="Run java application">
+    <java classname="${main.class}" fork="true">
+      <classpath refid="classpath"/>
+      <jvmarg line="--module-path ${javafx.lib.dir} --add-modules=javafx.controls"/>
+    </java>
+  </target>
+
+  <target name="copy-resources" description="Copy resource files">
+    <copy todir="../../Pomagaju/bin/classes">
+      <fileset dir="../../Pomagaju/src/main" excludes="**/*.java"/>
+    </copy>
+    <copy todir="../../Pomagaju/bin/test-classes">
+      <fileset dir="../../Pomagaju/src/main" excludes="**/*.java"/>
+    </copy>
+  </target>
+
+  <target name="create-jar" depends="compile,copy-resources"
+          description="Package to java archive">
+    <jar destfile="${jar.dir}/${jar.name}" basedir="../../Pomagaju/bin/classes">
+      <manifest>
+        <attribute name="Main-Class" value="${main.class}"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <target name="run-jar" depends="create-jar"
+          description="Run java application in java archive">
+    <java jar="${jar.dir}/${jar.name}" fork="true">
+      <classpath refid="lib.path"/>
+      <jvmarg line="--module-path ${javafx.lib.dir} --add-modules=javafx.controls"/>
+    </java>
+  </target>
+
+  <target name="clean" description="Delete old build and bin directories">
+    <delete dir="../../Pomagaju/bin"/>
+    <delete dir="${jar.dir}"/>
+  </target>
+
+  <target name="run-unit-tests" depends="compile,copy-resources"
+          description="Run all unit tests">
+    <junitlauncher haltOnFailure="true" printSummary="true">
+      <classpath refid="test.classpath"/>
+      <testclasses>
+        <fileset dir="../../Pomagaju/bin/test-classes" />
+      </testclasses>
+    </junitlauncher>
+  </target>
+
+</project>
